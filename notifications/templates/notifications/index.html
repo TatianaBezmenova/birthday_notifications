@@ -1,10 +1,52 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Ближайшие дни рождения</title>
 </head>
 <body>
-<p>TEST</p>
+    <script>
+        const socket = new WebSocket('ws://' + window.location.host + '/ws/notifications/');
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            const notifications = JSON.parse(data.data);
+            const notificationsBlock = document.getElementById('notifications-container');
+            const ul = document.getElementById('notifications-list');
+            notificationsBlock.removeChild(ul);
+            const notificationsList = document.createElement('ul');
+            notificationsList.id = 'notifications-list';
+            notificationsBlock.appendChild(notificationsList);
+
+            if (notifications.length) {
+                notifications.forEach((element) => {
+                    const li = document.createElement('li');
+                    li.appendChild(
+                        document.createTextNode(
+                            `${element?.fields?.birthday} - ${element?.fields?.name}`
+                        )
+                    );
+                    notificationsList.appendChild(li);
+                });
+            } else {
+                const p = document.createElement('p');
+                p.appendChild(
+                   document.createTextNode(`${data.message}`)
+                );
+                notificationsList.appendChild(p);
+            }
+        };
+    </script>
+    <h1>Ближайшие дни рождения</h1>
+    <div id="notifications-container">
+        <ul id="notifications-list">
+            {% if employee %}
+                {% for employee in employees %}
+                    <li>{{ employee.birthday|date:"d.m.Y" }} - {{ employee.name }}</li>
+                {% endfor %}
+            {% else %}
+                <p>{{ no_birthday_message }}</p>
+            {% endif %}
+        </ul>
+    </div>
 </body>
 </html>
