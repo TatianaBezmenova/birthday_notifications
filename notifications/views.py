@@ -25,7 +25,7 @@ def get_birthday_data():
         birthday = employee.birthday
         birth_month_day = datetime.date(month=birthday.month, day=birthday.day, year=birthday.year)
         system_month_day = datetime.date(month=on_date.month, day=on_date.day, year=birthday.year)
-        if 0 <= (system_month_day - birth_month_day).days <= DAYS_COUNT:
+        if 0 <= (birth_month_day - system_month_day).days <= DAYS_COUNT:
             result.append(employee)
 
     return result

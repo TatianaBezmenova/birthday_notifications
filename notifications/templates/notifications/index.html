@@ -39,7 +39,7 @@
     <h1>Ближайшие дни рождения</h1>
     <div id="notifications-container">
         <ul id="notifications-list">
-            {% if employee %}
+            {% if employees %}
                 {% for employee in employees %}
                     <li>{{ employee.birthday|date:"d.m.Y" }} - {{ employee.name }}</li>
                 {% endfor %}
